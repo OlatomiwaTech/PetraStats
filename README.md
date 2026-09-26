@@ -19,6 +19,10 @@ It provides a centralized system for managing football seasons, teams, players, 
 * Match details and event timelines
 * Season-based statistics
 
+### Preview
+
+![alt text](image-1.png)
+
 ### Administration
 
 * Secure admin authentication
