@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum EventType {
+  GOAL
+  ASSIST
+  YELLOW_CARD
+  RED_CARD
+  SAVE
+  CLEAN_SHEET
+}
+
+enum MatchStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Season {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  startDate DateTime
+  endDate   DateTime
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teams   TeamSeason[]
+  matches Match[]
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  seasons     TeamSeason[]
+  players     Player[]
+  homeMatches Match[]      @relation("HomeTeam")
+  awayMatches Match[]      @relation("AwayTeam")
+}
+
+model TeamSeason {
+  id       String @id @default(uuid())
+  teamId   String
+  seasonId String
+
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, seasonId])
+}
+
+model Player {
+  id          String   @id @default(uuid())
+  name        String
+  number      Int
+  position    String
+  teamId      String
+  isGoalkeeper Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  team            Team              @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  events          MatchEvent[]      @relation("PlayerEvents")
+  assistedEvents  MatchEvent[]      @relation("AssistPlayerEvents")
+  goalkeeperStats GoalkeeperStats[]
+}
+
+model Match {
+  id          String      @id @default(uuid())
+  seasonId    String
+  homeTeamId  String
+  awayTeamId  String
+  homeScore   Int         @default(0)
+  awayScore   Int         @default(0)
+  matchDate   DateTime
+  status      MatchStatus @default(SCHEDULED)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  season          Season            @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+  homeTeam        Team              @relation("HomeTeam", fields: [homeTeamId], references: [id], onDelete: Cascade)
+  awayTeam        Team              @relation("AwayTeam", fields: [awayTeamId], references: [id], onDelete: Cascade)
+  events          MatchEvent[]
+  goalkeeperStats GoalkeeperStats[]
+}
+
+model MatchEvent {
+  id             String    @id @default(uuid())
+  matchId        String
+  type           EventType
+  minute         Int
+  playerId       String
+  assistPlayerId String?
+  createdAt      DateTime  @default(now())
+
+  match        Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  player       Player  @relation("PlayerEvents", fields: [playerId], references: [id], onDelete: Cascade)
+  assistPlayer Player? @relation("AssistPlayerEvents", fields: [assistPlayerId], references: [id], onDelete: Cascade)
+}
+
+model GoalkeeperStats {
+  id            String   @id @default(uuid())
+  matchId       String
+  playerId      String
+  saves         Int      @default(0)
+  goalsConceded Int      @default(0)
+  cleanSheet    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  match  Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, playerId])
+}
