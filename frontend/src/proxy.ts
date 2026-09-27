@@ -6,7 +6,7 @@ const SECRET_KEY = new TextEncoder().encode(
   process.env.NEXTAUTH_SECRET || "default_fallback_secret_key_change_in_production"
 );
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/admin")) {
