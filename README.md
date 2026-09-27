@@ -62,29 +62,24 @@ Dashboard updated
 
 ## Architecture
 
-PetraStats uses a separated frontend/backend architecture.
+PetraStats is built as a full-stack Next.js application using Server Actions.
 
 ```text
-┌─────────────────────┐
-│      Frontend       │
-│      Next.js        │
-│   React + TypeScript│
-└──────────┬──────────┘
-           │
-           │ REST API
-           ▼
-┌─────────────────────┐
-│       Backend       │
-│ Express + TypeScript│
-│  Auth + Business    │
-│      Logic          │
-└──────────┬──────────┘
-           │
-           │ Prisma
-           ▼
-┌─────────────────────┐
-│     PostgreSQL      │
-└─────────────────────┘
+┌─────────────────────────┐
+│     PetraStats App      │
+│                         │
+│  Next.js (App Router)   │
+│   React + TypeScript    │
+│                         │
+│ ┌─────────────────────┐ │
+│ │   Server Actions    │ │
+│ └──────────┬──────────┘ │
+└────────────┼────────────┘
+             │ Prisma
+             ▼
+┌─────────────────────────┐
+│       PostgreSQL        │
+└─────────────────────────┘
 ```
 
 ## Project Structure
@@ -93,14 +88,12 @@ PetraStats uses a separated frontend/backend architecture.
 petra-stats/
 ├── frontend/
 │   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── ...
-│
-├── backend/
-│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   └── lib/
 │   ├── prisma/
 │   │   └── schema.prisma
+│   ├── public/
 │   ├── package.json
 │   └── ...
 │
@@ -121,15 +114,15 @@ petra-stats/
 * Lucide React
 * Recharts
 
-### Backend
+### Backend (Next.js Server Actions)
 
 * Node.js
-* Express
-* TypeScript
+* Next.js Server Actions
 * Prisma
 * PostgreSQL
 * Zod
-* Authentication and authorization
+* jose (Authentication)
+* bcryptjs
 
 ### Development
 
