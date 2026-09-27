@@ -148,70 +148,40 @@ git clone <repository-url>
 cd petra-stats
 ```
 
-### 2. Install frontend dependencies
+### 2. Install dependencies
 
 ```bash
 cd frontend
 npm install
 ```
 
-### 3. Install backend dependencies
+### 3. Configure environment variables
 
-```bash
-cd ../backend
-npm install
-```
-
-### 4. Configure environment variables
-
-Create a `.env` file inside `backend/`.
+Create a `.env` file inside `frontend/`.
 
 ```env
 DATABASE_URL="postgresql://username:password@localhost:5432/petra_stats"
 AUTH_SECRET="your-development-secret"
-PORT=5000
-CLIENT_URL="http://localhost:3000"
-```
-
-Create a `.env.local` file inside `frontend/`.
-
-```env
-NEXT_PUBLIC_API_URL="http://localhost:5000/api"
 ```
 
 Never commit real environment variables to Git.
 
-### 5. Set up Prisma
+### 4. Set up Prisma
 
-From the backend directory:
+From the frontend directory:
 
 ```bash
 npx prisma generate
-npx prisma migrate dev
+npx prisma db push
 ```
 
-### 6. Start the backend
+### 5. Start the application
 
 ```bash
 npm run dev
 ```
 
-The backend runs on:
-
-```text
-http://localhost:5000
-```
-
-### 7. Start the frontend
-
-Open another terminal:
-
-```bash
-cd frontend
-npm run dev
-```
-
-The frontend runs on:
+The app runs on:
 
 ```text
 http://localhost:3000
