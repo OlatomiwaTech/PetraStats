@@ -62,24 +62,29 @@ Dashboard updated
 
 ## Architecture
 
-PetraStats is built as a full-stack Next.js application using Server Actions.
+PetraStats uses a separated frontend/backend architecture.
 
 ```text
-┌─────────────────────────┐
-│     PetraStats App      │
-│                         │
-│  Next.js (App Router)   │
-│   React + TypeScript    │
-│                         │
-│ ┌─────────────────────┐ │
-│ │   Server Actions    │ │
-│ └──────────┬──────────┘ │
-└────────────┼────────────┘
-             │ Prisma
-             ▼
-┌─────────────────────────┐
-│       PostgreSQL        │
-└─────────────────────────┘
+┌─────────────────────┐
+│      Frontend       │
+│      Next.js        │
+│   React + TypeScript│
+└──────────┬──────────┘
+           │
+           │ REST API
+           ▼
+┌─────────────────────┐
+│       Backend       │
+│ Express + TypeScript│
+│  Auth + Business    │
+│      Logic          │
+└──────────┬──────────┘
+           │
+           │ Prisma
+           ▼
+┌─────────────────────┐
+│     PostgreSQL      │
+└─────────────────────┘
 ```
 
 ## Project Structure
