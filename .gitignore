@@ -1,1 +1,191 @@
-(empty)
+# ============================================================
+
+# PetraStats - Root .gitignore
+
+# Frontend: Next.js / TypeScript
+
+# Backend: Node.js / Express / Prisma
+
+# ============================================================
+
+# -------------------------
+
+# Dependencies
+
+# -------------------------
+
+node_modules/
+**/node_modules/
+
+# -------------------------
+
+# Environment variables
+
+# -------------------------
+
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Allow example environment files
+
+!.env.example
+!**/.env.example
+
+# -------------------------
+
+# Next.js
+
+# -------------------------
+
+.next/
+out/
+.vercel/
+
+# -------------------------
+
+# Build / distribution
+
+# -------------------------
+
+dist/
+build/
+coverage/
+.turbo/
+.cache/
+
+# -------------------------
+
+# TypeScript
+
+# -------------------------
+
+*.tsbuildinfo
+
+# -------------------------
+
+# Prisma
+
+# -------------------------
+
+# Prisma local/dev files
+
+prisma/*.db
+prisma/*.db-journal
+
+# Do NOT ignore migrations.
+
+# Prisma migrations belong in Git.
+
+# prisma/migrations/
+
+# -------------------------
+
+# Logs
+
+# -------------------------
+
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# -------------------------
+
+# Testing
+
+# -------------------------
+
+.nyc_output/
+playwright-report/
+test-results/
+
+# -------------------------
+
+# OS files
+
+# -------------------------
+
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -------------------------
+
+# IDE / Editors
+
+# -------------------------
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+.idea/
+*.iml
+
+*.swp
+*.swo
+
+# -------------------------
+
+# Temporary files
+
+# -------------------------
+
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.rej
+
+# -------------------------
+
+# Package manager files
+
+# -------------------------
+
+.pnpm-store/
+
+# Keep package-lock.json if using npm.
+
+# package-lock.json
+
+# -------------------------
+
+# Local development
+
+# -------------------------
+
+*.local
+
+# Local uploads / generated files
+
+uploads/
+tmp/
+temp/
+
+# -------------------------
+
+# Vercel
+
+# -------------------------
+
+.vercel/
+
+# -------------------------
+
+# Miscellaneous
+
+# -------------------------
+
+.Docker/
+*.pid
+*.seed
+*.pid.lock
+EOF
