@@ -227,7 +227,7 @@ export default async function LeaderboardPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white dark:bg-zinc-900 rounded-lg border shadow-sm p-6 space-y-4">
+        <div id="scorers" className="bg-white dark:bg-zinc-900 rounded-lg border shadow-sm p-6 space-y-4">
           <h2 className="text-xl font-bold">Top Goal Scorers</h2>
           <div className="divide-y">
             {topScorers.map((s, idx) => (
@@ -246,7 +246,7 @@ export default async function LeaderboardPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900 rounded-lg border shadow-sm p-6 space-y-4">
+        <div id="assists" className="bg-white dark:bg-zinc-900 rounded-lg border shadow-sm p-6 space-y-4">
           <h2 className="text-xl font-bold">Top Assists</h2>
           <div className="divide-y">
             {topAssists.map((a, idx) => (
@@ -265,7 +265,7 @@ export default async function LeaderboardPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900 rounded-lg border shadow-sm p-6 space-y-4">
+        <div id="goalkeepers" className="bg-white dark:bg-zinc-900 rounded-lg border shadow-sm p-6 space-y-4">
           <h2 className="text-xl font-bold font-mono">Goalkeeper Stats</h2>
           <div className="divide-y">
             {topGoalkeepers.map((gk, idx) => (
