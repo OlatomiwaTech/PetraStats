@@ -21,7 +21,7 @@ It provides a centralized system for managing football seasons, teams, players, 
 
 ### Preview
 
-![alt text](image-1.png)
+![alt text](/image-1.png)
 
 ### Administration
 
@@ -62,29 +62,24 @@ Dashboard updated
 
 ## Architecture
 
-PetraStats uses a separated frontend/backend architecture.
+PetraStats uses a single full-stack Next.js application with Server Actions and Route Handlers.
 
 ```text
-┌─────────────────────┐
-│      Frontend       │
-│      Next.js        │
-│   React + TypeScript│
-└──────────┬──────────┘
-           │
-           │ REST API
-           ▼
-┌─────────────────────┐
-│       Backend       │
-│ Express + TypeScript│
-│  Auth + Business    │
-│      Logic          │
-└──────────┬──────────┘
-           │
-           │ Prisma
-           ▼
-┌─────────────────────┐
-│     PostgreSQL      │
-└─────────────────────┘
+┌─────────────────────────────────┐
+│      Next.js Full-Stack App      │
+│  ┌─────────────┐  ┌─────────────┐│
+│  │   Frontend  │  │   Backend   ││
+│  │  App Router │  │ Route Hand. ││
+│  │   React     │  │ Server Acts ││
+│  │ Tailwind   │  │   Prisma    ││
+│  └─────────────┘  └─────────────┘│
+└──────────────┬──────────────────┘
+               │
+               │ PostgreSQL
+               ↓
+        ┌─────────────────┐
+        │   PostgreSQL    │
+        └─────────────────┘
 ```
 
 ## Project Structure
@@ -94,6 +89,17 @@ petra-stats/
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
+│   │   │   ├── api/          # Route Handlers
+│   │   │   │   ├── auth/
+│   │   │   │   ├── seasons/
+│   │   │   │   ├── teams/
+│   │   │   │   ├── players/
+│   │   │   │   ├── matches/
+│   │   │   │   └── stats/
+│   │   │   ├── admin/        # Admin pages
+│   │   │   ├── leaderboard/
+│   │   │   ├── matches/
+│   │   │   └── page.tsx
 │   │   ├── components/
 │   │   └── lib/
 │   ├── prisma/
@@ -101,7 +107,6 @@ petra-stats/
 │   ├── public/
 │   ├── package.json
 │   └── ...
-│
 ├── .gitignore
 ├── .env.example
 └── README.md
@@ -109,21 +114,16 @@ petra-stats/
 
 ## Technology Stack
 
-### Frontend
+### Full-Stack Application
 
-* Next.js
+* Next.js with App Router
 * React
 * TypeScript
 * Tailwind CSS
 * shadcn/ui
 * Lucide React
 * Recharts
-
-### Backend (Next.js Server Actions)
-
-* Node.js
-* Next.js Server Actions
-* Prisma
+* Prisma ORM
 * PostgreSQL
 * Zod
 * jose (Authentication)
@@ -166,7 +166,7 @@ Create a `.env` file inside `frontend/`.
 
 ```env
 DATABASE_URL="postgresql://username:password@localhost:5432/petra_stats"
-AUTH_SECRET="your-development-secret"
+NEXTAUTH_SECRET="your-development-secret"
 ```
 
 Never commit real environment variables to Git.
@@ -230,6 +230,9 @@ GOAL
 OWN_GOAL
 YELLOW_CARD
 RED_CARD
+ASSIST
+SAVE
+CLEAN_SHEET
 ```
 
 A goal event may contain:
@@ -245,33 +248,51 @@ Statistics are derived from these events.
 
 ## API
 
-The backend exposes a REST API for the frontend.
+The application exposes REST API endpoints via Route Handlers.
 
 Example endpoints:
 
 ```text
 GET    /api/seasons
+GET    /api/seasons/:id
+POST   /api/seasons
+PATCH  /api/seasons/:id
+DELETE /api/seasons/:id
+
 GET    /api/teams
+GET    /api/teams/:id
+POST   /api/teams
+PATCH  /api/teams/:id
+DELETE /api/teams/:id
+
 GET    /api/players
+GET    /api/players/:id
+POST   /api/players
+PATCH  /api/players/:id
+DELETE /api/players/:id
+
 GET    /api/matches
 GET    /api/matches/:id
+POST   /api/matches
+PATCH  /api/matches/:id
+DELETE /api/matches/:id
 
+GET    /api/matches/:id/events
+POST   /api/matches/:id/events
+PATCH  /api/matches/:id/events/:eventId
+DELETE /api/matches/:id/events/:eventId
+
+GET    /api/stats/dashboard
 GET    /api/stats/scorers
 GET    /api/stats/assists
 GET    /api/stats/goalkeepers
 
-POST   /api/admin/seasons
-POST   /api/admin/teams
-POST   /api/admin/players
-POST   /api/admin/matches
-
-POST   /api/admin/matches/:id/events
-
-PATCH  /api/admin/matches/:id/events/:eventId
-DELETE /api/admin/matches/:id/events/:eventId
+POST   /api/auth/login
+POST   /api/auth/logout
+GET    /api/auth/me
 ```
 
-Administrative endpoints require authentication and appropriate permissions.
+Administrative endpoints (POST, PATCH, DELETE) require authentication and ADMIN role.
 
 ## Security
 
@@ -329,8 +350,7 @@ and make sure dependencies and environment secrets are not being tracked.
 Planned deployment:
 
 ```text
-Frontend → Vercel
-Backend  → Render
+Full-Stack App → Vercel
 Database → Neon PostgreSQL
 ```
 
@@ -341,7 +361,6 @@ Production environment variables must be configured through the deployment platf
 ### Phase 1 — Foundation
 
 * [ ] Frontend setup
-* [ ] Backend setup
 * [ ] PostgreSQL setup
 * [ ] Prisma setup
 * [ ] Database schema

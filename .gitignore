@@ -24,13 +24,15 @@ node_modules/
 # -------------------------
 
 .env
-.env.*
 **/.env
-**/.env.*
 
 # Allow example environment files
 
 !.env.example
+!**/.env.example
+
+.env.*
+**/.env.*
 !**/.env.example
 
 # -------------------------
